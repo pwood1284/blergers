@@ -9,17 +9,33 @@ module Blergers
   class Post < ActiveRecord::Base
     has_many :post_tags
     has_many :tags, through: :post_tags
+    def self.page(n)
+      if n == 1
+      self.order(date: :desc).limit(10)
+    else
+      self.order(date: :desc).limit(10).offset((n-1)*10)
+    end
+
   end
+end
+
 
   class Tag < ActiveRecord::Base
     has_many :post_tags
     has_many :posts, through: :post_tags
+    def self.top_tags
+      self.order(post_tags: :desc).each do |t|
+        puts "#{t.post_id}"
+
+    end
+
   end
 
   class PostTag < ActiveRecord::Base
     belongs_to :post
     belongs_to :tag
   end
+end
 end
 
 def add_post!(post)
