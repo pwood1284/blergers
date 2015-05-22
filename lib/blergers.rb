@@ -11,7 +11,7 @@ module Blergers
     has_many :tags, through: :post_tags
     def self.page(n)
       if n == 1
-      self.order(date: :desc).limit(10)
+      Post.order(date: :desc).first(10)
     else
       self.order(date: :desc).limit(10).offset((n-1)*10)
     end
