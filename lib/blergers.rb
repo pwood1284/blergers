@@ -24,9 +24,10 @@ end
     has_many :post_tags
     has_many :posts, through: :post_tags
     def self.top_tags
-      self.order(post_tags: :desc).each do |t|
-        puts "#{t.post_id}"
-
+      #Ruby code: Tag.all.map {|x| [x.name, x.posts.count]}.
+      # sort_by {|x| x[1]}.reverse
+    Tag.joins(:post_tags).group("tags.name").order("count_all DESC").count
+    # or   Tag.joins(:post_tags).group(name:).count
     end
 
   end
@@ -36,7 +37,7 @@ end
     belongs_to :tag
   end
 end
-end
+
 
 def add_post!(post)
   puts "Importing post: #{post[:title]}"
